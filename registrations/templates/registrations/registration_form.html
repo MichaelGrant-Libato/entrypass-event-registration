@@ -1,0 +1,117 @@
+
+{% extends "events/base.html" %}
+
+{% block title %}Register | EntryPass{% endblock %}
+
+{% block content %}
+<a class="back-link"
+   href="{% url 'events:detail' event.pk %}">
+    &larr; Back to event
+</a>
+
+<div class="registration-layout">
+
+    <section>
+        <p class="eyebrow">EVENT REGISTRATION</p>
+        <h1>Reserve your spot</h1>
+        <p class="page-description">
+            Complete the form below to register for
+            {{ event.title }}.
+        </p>
+
+        <div class="form-card">
+            <div class="form-card-header">
+                <h2>Attendee information</h2>
+                <p>
+                    Please enter your details accurately.
+                    All fields are required.
+                </p>
+            </div>
+
+            {% if form.non_field_errors %}
+            <div class="form-alert" role="alert">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class="form-field">
+                    <label for="{{ field.id_for_label }}">
+                        {{ field.label }}
+                        <span class="required">*</span>
+                    </label>
+
+                    {{ field }}
+
+                    {% for error in field.errors %}
+                    <p class="field-error" role="alert">
+                        {{ error }}
+                    </p>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
+                <div class="form-actions">
+                    <button type="submit" class="button">
+                        Confirm registration
+                    </button>
+
+                    <p class="helper-text">
+                        Your registration will be confirmed
+                        once successfully submitted.
+                    </p>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <aside>
+        <div class="summary-card">
+            <p class="eyebrow">YOUR EVENT</p>
+            <h2>{{ event.title }}</h2>
+
+            <div class="summary-item">
+                <span class="meta-label">DATE</span>
+                <strong>
+                    {{ event.starts_at|date:"F j, Y" }}
+                </strong>
+            </div>
+
+            <div class="summary-item">
+                <span class="meta-label">TIME</span>
+                <strong>
+                    {{ event.starts_at|time:"g:i A" }} –
+                    {{ event.ends_at|time:"g:i A" }}
+                </strong>
+                <span class="muted">Philippine Standard Time</span>
+            </div>
+
+            <div class="summary-item">
+                <span class="meta-label">VENUE</span>
+                <strong>{{ event.venue }}</strong>
+            </div>
+
+            <div class="summary-item">
+                <span class="meta-label">AVAILABILITY</span>
+                <strong>
+                    {{ spots_left }} of {{ event.capacity }}
+                    spots left
+                </strong>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-total">
+                <span>Registration fee</span>
+                <strong>Free</strong>
+            </div>
+        </div>
+    </aside>
+
+</div>
+{% endblock %}
