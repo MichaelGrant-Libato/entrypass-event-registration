@@ -34,6 +34,30 @@
             </p>
         </div>
 
+        <section class="ticket-qr-section" aria-labelledby="qr-heading">
+            <h2 id="qr-heading">Entry QR code</h2>
+
+            <p class="qr-description">
+                Present this QR code to the event staff
+                when you arrive.
+            </p>
+
+            <div class="qr-image-wrapper">
+                <img
+                    src="{{ qr_code_data }}"
+                    alt="QR code for your event ticket"
+                    class="ticket-qr-image"
+                    width="240"
+                    height="240"
+                >
+            </div>
+
+            <p class="qr-instruction">
+                Staff will scan this code to verify
+                your registration.
+            </p>
+        </section>
+
         <div class="confirmation-details">
             <div class="summary-item">
                 <span class="meta-label">ATTENDEE</span>
@@ -50,7 +74,8 @@
             <div class="summary-item">
                 <span class="meta-label">TIME</span>
                 <strong>
-                    {{ registration.event.starts_at|time:"g:i A" }}
+                    {{ registration.event.starts_at|time:"g:i A" }} –
+                    {{ registration.event.ends_at|time:"g:i A" }}
                 </strong>
             </div>
 
@@ -64,6 +89,13 @@
            class="button button-link">
             Back to events
         </a>
+
+        <p class="ticket-help">
+            Need to retrieve your ticket later?
+            <a href="{% url 'registrations:lookup' %}">
+                Find your ticket
+            </a>
+        </p>
 
     </section>
 </div>

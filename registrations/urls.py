@@ -16,4 +16,9 @@ urlpatterns = [
         views.registration_confirmation,
         name="confirmation",
     ),
+    path(
+        "lookup/",
+        views.ticket_lookup,
+        name="lookup",
+    ),
 ]

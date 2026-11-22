@@ -7,7 +7,8 @@ from django.views.decorators.http import require_GET, require_http_methods
 
 from events.models import Event
 
-from .forms import AttendeeRegistrationForm
+from .forms import AttendeeRegistrationForm, TicketLookupForm
+from .qr import generate_ticket_qr
 from .models import Registration
 from .services import RegistrationError, register_attendee
 
@@ -94,8 +95,57 @@ def registration_confirmation(request):
     if registration is None:
         return redirect("events:list")
 
+
     return render(
         request,
         "registrations/confirmation.html",
-        {"registration": registration},
+        {
+            "registration": registration,
+            "qr_code_data": generate_ticket_qr(
+                registration.ticket_code
+            ),
+        },
     )
+
+
+@never_cache
+@require_http_methods(["GET", "POST"])
+def ticket_lookup(request):
+    form = TicketLookupForm(
+        request.POST if request.method == "POST" else None
+    )
+
+    if request.method == "POST":
+        # Revoke access to any previously viewed ticket
+        # before processing a new lookup.
+        request.session.pop("new_registration_id", None)
+
+        if form.is_valid():
+            ticket_code = form.cleaned_data["ticket_code"]
+            email = form.cleaned_data["email"]
+
+            registration = Registration.objects.filter(
+                ticket_code=ticket_code,
+                email__iexact=email,
+            ).first()
+
+            if registration is None:
+                form.add_error(
+                    None,
+                    "Ticket not found",
+                )
+            else:
+                request.session[
+                    "new_registration_id"
+                ] = registration.pk
+
+                return redirect(
+                    "registrations:confirmation"
+                )
+
+    return render(
+        request,
+        "registrations/ticket_lookup.html",
+        {"form": form},
+    )
+
