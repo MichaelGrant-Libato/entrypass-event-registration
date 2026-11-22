@@ -1,0 +1,41 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}EntryPass{% endblock %}</title>
+
+    <link rel="stylesheet"
+          href="{% static 'events/styles.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="{% url 'events:list' %}">
+                <span class="brand-mark">E</span>
+                <span>EntryPass</span>
+            </a>
+
+            <nav aria-label="Main navigation">
+                <a class="nav-link" href="{% url 'events:list' %}">
+                    Events
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content" class="container main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <span>EntryPass</span>
+            <span>Event registration &amp; check-in</span>
+        </div>
+    </footer>
+</body>
+</html>

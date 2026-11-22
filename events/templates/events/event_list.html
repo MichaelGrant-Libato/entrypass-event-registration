@@ -1,0 +1,80 @@
+
+{% extends "events/base.html" %}
+
+{% block title %}Events | EntryPass{% endblock %}
+
+{% block content %}
+<section class="page-intro">
+    <p class="eyebrow">DISCOVER EVENTS</p>
+    <h1>Upcoming events</h1>
+    <p class="page-description">
+        Explore upcoming events, find the details you need,
+        and check seat availability before registering.
+    </p>
+</section>
+
+<section aria-label="Upcoming events">
+    <div class="section-heading">
+        <h2>Available events</h2>
+        <span class="section-count">
+            {{ events|length }} event{{ events|length|pluralize }}
+        </span>
+    </div>
+
+    <div class="event-grid">
+        {% for event in events %}
+        <article class="event-card">
+            <div class="event-card-top">
+                <span class="event-date">
+                    {{ event.starts_at|date:"M j, Y" }}
+                </span>
+
+                {% if event.registration_open %}
+                    <span class="status status-open">Open</span>
+                {% else %}
+                    <span class="status status-full">Full</span>
+                {% endif %}
+            </div>
+
+            <h3>{{ event.title }}</h3>
+
+            <p class="event-description">
+                {{ event.description|truncatewords:24 }}
+            </p>
+
+            <div class="event-information">
+                <p>
+                    <span class="meta-label">TIME</span>
+                    {{ event.starts_at|time:"g:i A" }} –
+                    {{ event.ends_at|time:"g:i A" }}
+                </p>
+                <p>
+                    <span class="meta-label">VENUE</span>
+                    {{ event.venue }}
+                </p>
+            </div>
+
+            <div class="event-card-footer">
+                <span class="availability">
+                    {{ event.spots_left }} of {{ event.capacity }}
+                    spots left
+                </span>
+
+                <a href="{% url 'events:detail' event.pk %}"
+                   class="text-link">
+                    View details &rarr;
+                </a>
+            </div>
+        </article>
+        {% empty %}
+        <div class="empty-state">
+            <h3>No upcoming events</h3>
+            <p>
+                There are no published upcoming events
+                available at the moment.
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
