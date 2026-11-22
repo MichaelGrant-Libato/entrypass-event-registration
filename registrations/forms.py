@@ -54,3 +54,36 @@ class AttendeeRegistrationForm(forms.Form):
 
     def clean_email(self):
         return self.cleaned_data["email"].strip().lower()
+
+
+class TicketLookupForm(forms.Form):
+    ticket_code = forms.CharField(
+        label="Ticket code",
+        max_length=40,
+        widget=forms.TextInput(attrs={
+            "class": "form-input",
+            "placeholder": "EP-XXXXXXXX...",
+            "autocomplete": "off",
+            "spellcheck": "false",
+        }),
+    )
+
+    email = forms.EmailField(
+        label="Email address",
+        widget=forms.EmailInput(attrs={
+            "class": "form-input",
+            "placeholder": "Email used during registration",
+            "autocomplete": "email",
+        }),
+    )
+
+    def clean_ticket_code(self):
+        return self.cleaned_data[
+            "ticket_code"
+        ].strip().upper()
+
+    def clean_email(self):
+        return self.cleaned_data[
+            "email"
+        ].strip().lower()
+

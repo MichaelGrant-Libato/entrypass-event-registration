@@ -19,9 +19,12 @@
                 <span>EntryPass</span>
             </a>
 
-            <nav aria-label="Main navigation">
+            <nav class="header-links" aria-label="Main navigation">
                 <a class="nav-link" href="{% url 'events:list' %}">
                     Events
+                </a>
+                <a class="nav-link" href="{% url 'registrations:lookup' %}">
+                    Find ticket
                 </a>
             </nav>
         </div>

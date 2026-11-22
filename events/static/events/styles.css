@@ -615,3 +615,90 @@ h1 {
         font-size: 14px;
     }
 }
+
+
+/* Header navigation */
+
+.header-links {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+}
+
+/* QR ticket */
+
+.ticket-qr-section {
+    margin: 30px 0;
+    padding: 28px 20px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.ticket-qr-section h2 {
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+
+.qr-description,
+.qr-instruction {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.qr-image-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 22px 0;
+}
+
+.ticket-qr-image {
+    display: block;
+    width: min(240px, 100%);
+    height: auto;
+    aspect-ratio: 1;
+    background: #fff;
+}
+
+.qr-instruction {
+    margin-bottom: 0;
+}
+
+.ticket-help {
+    margin: 22px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+}
+
+.ticket-help a {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* Ticket lookup */
+
+.lookup-wrapper {
+    width: min(100%, 570px);
+    margin-inline: auto;
+}
+
+.lookup-wrapper .page-description {
+    margin-bottom: 30px;
+}
+
+@media (max-width: 420px) {
+    .header-links {
+        gap: 14px;
+    }
+
+    .nav-link {
+        font-size: 13px;
+    }
+
+    .ticket-qr-section {
+        padding: 24px 14px;
+    }
+}
+
