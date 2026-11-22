@@ -1,0 +1,71 @@
+
+{% extends "events/base.html" %}
+
+{% block title %}Registration Confirmed | EntryPass{% endblock %}
+
+{% block content %}
+
+<div class="confirmation-wrapper">
+    <section class="confirmation-card">
+
+        <div class="confirmation-icon" aria-hidden="true">
+            &#10003;
+        </div>
+
+        <p class="eyebrow">REGISTRATION CONFIRMED</p>
+
+        <h1>You're registered.</h1>
+
+        <p class="confirmation-description">
+            Your registration for
+            <strong>{{ registration.event.title }}</strong>
+            has been confirmed.
+        </p>
+
+        <div class="ticket-reference-section">
+            <span class="meta-label">YOUR TICKET CODE</span>
+
+            <code class="ticket-reference">
+                {{ registration.ticket_code }}
+            </code>
+
+            <p class="helper-text">
+                Keep this code for your records.
+            </p>
+        </div>
+
+        <div class="confirmation-details">
+            <div class="summary-item">
+                <span class="meta-label">ATTENDEE</span>
+                <strong>{{ registration.full_name }}</strong>
+            </div>
+
+            <div class="summary-item">
+                <span class="meta-label">DATE</span>
+                <strong>
+                    {{ registration.event.starts_at|date:"F j, Y" }}
+                </strong>
+            </div>
+
+            <div class="summary-item">
+                <span class="meta-label">TIME</span>
+                <strong>
+                    {{ registration.event.starts_at|time:"g:i A" }}
+                </strong>
+            </div>
+
+            <div class="summary-item">
+                <span class="meta-label">VENUE</span>
+                <strong>{{ registration.event.venue }}</strong>
+            </div>
+        </div>
+
+        <a href="{% url 'events:list' %}"
+           class="button button-link">
+            Back to events
+        </a>
+
+    </section>
+</div>
+
+{% endblock %}

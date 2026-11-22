@@ -57,11 +57,14 @@
             {% elif not event.registration_open %}
                 <button class="button" disabled>Event full</button>
             {% else %}
-                <button class="button" disabled>
-                    Registration form coming next
-                </button>
+                <a
+                    href="{% url 'registrations:register' event.pk %}"
+                    class="button button-link"
+                >
+                    Register for this event
+                </a>
                 <p class="helper-text">
-                    Online registration is being implemented.
+                    Registration is free. Limited seats available.
                 </p>
             {% endif %}
         </div>
