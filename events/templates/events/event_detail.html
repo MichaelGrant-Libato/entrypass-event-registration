@@ -1,0 +1,70 @@
+
+{% extends "events/base.html" %}
+
+{% block title %}{{ event.title }} | EntryPass{% endblock %}
+
+{% block content %}
+<a class="back-link" href="{% url 'events:list' %}">
+    &larr; Back to events
+</a>
+
+<section class="detail-layout">
+    <div class="detail-main">
+        <p class="eyebrow">EVENT DETAILS</p>
+        <h1>{{ event.title }}</h1>
+
+        <div class="detail-description">
+            <h2>About this event</h2>
+            <p>{{ event.description|linebreaksbr }}</p>
+        </div>
+    </div>
+
+    <aside class="detail-sidebar">
+        <div class="summary-card">
+            <h2>Event information</h2>
+
+            <div class="summary-item">
+                <span class="meta-label">DATE</span>
+                <strong>{{ event.starts_at|date:"F j, Y" }}</strong>
+            </div>
+
+            <div class="summary-item">
+                <span class="meta-label">TIME</span>
+                <strong>
+                    {{ event.starts_at|time:"g:i A" }} –
+                    {{ event.ends_at|time:"g:i A" }}
+                </strong>
+                <span class="muted">Philippine Standard Time</span>
+            </div>
+
+            <div class="summary-item">
+                <span class="meta-label">VENUE</span>
+                <strong>{{ event.venue }}</strong>
+            </div>
+
+            <div class="summary-item">
+                <span class="meta-label">AVAILABILITY</span>
+                <strong>
+                    {{ event.spots_left }} of {{ event.capacity }}
+                    spots left
+                </strong>
+            </div>
+
+            {% if event.has_ended %}
+                <p class="notice">This event has ended.</p>
+            {% elif event.has_started %}
+                <p class="notice">Registration is closed.</p>
+            {% elif not event.registration_open %}
+                <button class="button" disabled>Event full</button>
+            {% else %}
+                <button class="button" disabled>
+                    Registration form coming next
+                </button>
+                <p class="helper-text">
+                    Online registration is being implemented.
+                </p>
+            {% endif %}
+        </div>
+    </aside>
+</section>
+{% endblock %}
