@@ -1,0 +1,184 @@
+
+{% extends "events/base.html" %}
+
+{% block title %}Attendees | EntryPass{% endblock %}
+
+{% block content %}
+<a href="{% url 'checkin:dashboard' %}" class="back-link">
+    &larr; Back to staff workspace
+</a>
+
+<div class="attendee-page-heading">
+    <div>
+        <p class="eyebrow">ATTENDEE MANAGEMENT</p>
+        <h1>{{ event.title }}</h1>
+        <p class="page-description">
+            View registrations and monitor event attendance.
+        </p>
+    </div>
+
+    <a
+        href="{% url 'checkin:event_checkin' event.pk %}"
+        class="attendee-action-link"
+    >
+        Open check-in &rarr;
+    </a>
+</div>
+
+<div class="attendee-stats">
+    <section class="attendee-stat-card">
+        <span class="meta-label">REGISTERED / CAPACITY</span>
+        <strong>{{ registered_count }} / {{ event.capacity }}</strong>
+        <span class="muted">Confirmed registrations</span>
+    </section>
+
+    <section class="attendee-stat-card">
+        <span class="meta-label">CHECKED IN / REGISTERED</span>
+        <strong>{{ checked_in_count }} / {{ registered_count }}</strong>
+        <span class="muted">Attendees checked in</span>
+    </section>
+
+    <section class="attendee-stat-card">
+        <span class="meta-label">AVAILABLE SPOTS</span>
+        <strong>{{ spots_left }}</strong>
+        <span class="muted">Remaining capacity</span>
+    </section>
+</div>
+
+<section class="attendee-directory">
+    <div class="attendee-directory-heading">
+        <div>
+            <h2>Attendee directory</h2>
+            <p>
+                Search by attendee name or ticket code.
+            </p>
+        </div>
+        <span class="muted">
+            {{ page_obj.paginator.count }} record(s)
+        </span>
+    </div>
+
+    <form
+        method="get"
+        action="{% url 'checkin:event_attendees' event.pk %}"
+        class="attendee-search-form"
+        role="search"
+    >
+        <label for="attendee-search" class="sr-only">
+            Search attendees
+        </label>
+
+        <input
+            id="attendee-search"
+            type="search"
+            name="q"
+            value="{{ search_query }}"
+            placeholder="Search name or ticket code"
+            class="form-input"
+            maxlength="100"
+        >
+
+        <button type="submit" class="attendee-search-button">
+            Search
+        </button>
+
+        {% if search_query %}
+        <a
+            href="{% url 'checkin:event_attendees' event.pk %}"
+            class="attendee-clear-link"
+        >
+            Clear
+        </a>
+        {% endif %}
+    </form>
+
+    <div class="attendee-table-scroll">
+        <table class="attendee-table">
+            <thead>
+                <tr>
+                    <th scope="col">Attendee</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Mobile</th>
+                    <th scope="col">Ticket code</th>
+                    <th scope="col">Registered</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Checked in</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for attendee in page_obj %}
+                <tr>
+                    <td>
+                        <strong>{{ attendee.full_name }}</strong>
+                    </td>
+
+                    <td>{{ attendee.email }}</td>
+
+                    <td>{{ attendee.mobile }}</td>
+
+                    <td>
+                        <code class="attendee-ticket-code">
+                            {{ attendee.ticket_code }}
+                        </code>
+                    </td>
+
+                    <td>
+                        {{ attendee.registered_at|date:"M j, Y" }}
+                        <span class="attendee-time">
+                            {{ attendee.registered_at|time:"g:i A" }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="attendee-status attendee-status-{{ attendee.status }}">
+                            {{ attendee.get_status_display }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {% if attendee.checked_in_at %}
+                            {{ attendee.checked_in_at|date:"M j, Y" }}
+                            <span class="attendee-time">
+                                {{ attendee.checked_in_at|time:"g:i A" }}
+                            </span>
+                        {% else %}
+                            <span class="muted">&mdash;</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="attendee-table-empty">
+                        No attendees found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if page_obj.has_other_pages %}
+    <nav class="attendee-pagination" aria-label="Attendee pages">
+        <span class="muted">
+            Page {{ page_obj.number }}
+            of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        <div class="attendee-pagination-actions">
+            {% if page_obj.has_previous %}
+            <a href="?q={{ search_query|urlencode }}&amp;page={{ page_obj.previous_page_number }}">
+                Previous
+            </a>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+            <a href="?q={{ search_query|urlencode }}&amp;page={{ page_obj.next_page_number }}">
+                Next
+            </a>
+            {% endif %}
+        </div>
+    </nav>
+    {% endif %}
+</section>
+{% endblock %}
