@@ -195,6 +195,19 @@ if not DEBUG:
     }
 
 
+# Production security
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_SECONDS = 3600
+
+    if os.getenv("RENDER") == "true":
+        SECURE_PROXY_SSL_HEADER = (
+            "HTTP_X_FORWARDED_PROTO",
+            "https",
+        )
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
