@@ -824,3 +824,91 @@ h1 {
     }
 }
 
+
+/* Event check-in */
+
+.staff-checkin-link {
+    margin-top: 8px;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.staff-checkin-link:hover {
+    text-decoration: underline;
+}
+
+.checkin-heading {
+    margin-bottom: 34px;
+}
+
+.checkin-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 28px;
+    align-items: start;
+}
+
+.checkin-result {
+    padding: 18px 20px;
+    margin-bottom: 26px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.checkin-result strong {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 16px;
+}
+
+.checkin-result p {
+    margin-bottom: 0;
+}
+
+.checkin-result-checked_in {
+    background: #edf7f0;
+    border-color: #cce8d3;
+    color: #22673d;
+}
+
+.checkin-result-already_checked_in {
+    background: #fff9e8;
+    border-color: #efdfaa;
+    color: #805b16;
+}
+
+.checkin-result-invalid_ticket {
+    background: #fff1f1;
+    border-color: #f0cccc;
+    color: #a33535;
+}
+
+.checkin-result-wrong_day,
+.checkin-window-note {
+    padding: 16px;
+    margin-bottom: 24px;
+    background: #f4f6f8;
+    border: 1px solid #dfe5ec;
+    border-radius: 8px;
+    color: #536172;
+    font-size: 14px;
+}
+
+.checkin-window-note strong {
+    color: var(--text);
+}
+
+.checkin-helper {
+    margin: 16px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .checkin-layout {
+        grid-template-columns: 1fr;
+    }
+}

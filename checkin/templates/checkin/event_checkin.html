@@ -1,0 +1,142 @@
+
+{% extends "events/base.html" %}
+
+{% block title %}Event Check-in | EntryPass{% endblock %}
+
+{% block content %}
+<a href="{% url 'checkin:dashboard' %}" class="back-link">
+    &larr; Back to staff workspace
+</a>
+
+<div class="checkin-heading">
+    <p class="eyebrow">EVENT CHECK-IN</p>
+    <h1>{{ event.title }}</h1>
+    <p class="page-description">
+        Verify attendee tickets and record event attendance.
+    </p>
+</div>
+
+<div class="checkin-layout">
+    <section class="form-card">
+        <div class="form-card-header">
+            <h2>Verify a ticket</h2>
+            <p>
+                Enter the ticket code displayed on
+                the attendee's QR ticket.
+            </p>
+        </div>
+
+        {% if not can_check_in %}
+        <div class="checkin-window-note" role="status">
+            Check-in is only available on the event day:
+            <strong>{{ event.starts_at|date:"F j, Y" }}</strong>.
+        </div>
+        {% endif %}
+
+        {% if result %}
+        <div
+            class="checkin-result checkin-result-{{ result.status }}"
+            role="status"
+            aria-live="polite"
+        >
+            {% if result.status == "checked_in" %}
+                <strong>Checked in</strong>
+                <p>
+                    {{ result.registration.full_name }}
+                    has been checked in successfully.
+                </p>
+
+            {% elif result.status == "already_checked_in" %}
+                <strong>Already checked in</strong>
+                <p>
+                    {{ result.registration.full_name }}
+                    was checked in on
+                    {{ result.registration.checked_in_at|date:"M j, Y" }}
+                    at
+                    {{ result.registration.checked_in_at|time:"g:i A" }}.
+                </p>
+
+            {% elif result.status == "invalid_ticket" %}
+                <strong>Invalid ticket</strong>
+                <p>
+                    This ticket is not valid for the
+                    selected event.
+                </p>
+
+            {% elif result.status == "wrong_day" %}
+                <strong>Check-in unavailable</strong>
+                <p>
+                    Attendance can only be recorded
+                    on the scheduled event day.
+                </p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="form-field">
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+
+                {{ field }}
+
+                {% for error in field.errors %}
+                <p class="field-error" role="alert">
+                    {{ error }}
+                </p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <button
+                type="submit"
+                class="button"
+                {% if not can_check_in %}disabled{% endif %}
+            >
+                Verify and check in
+            </button>
+        </form>
+
+        <p class="checkin-helper">
+            A ticket can only be checked in once.
+        </p>
+    </section>
+
+    <aside class="summary-card">
+        <p class="eyebrow">SELECTED EVENT</p>
+        <h2>{{ event.title }}</h2>
+
+        <div class="summary-item">
+            <span class="meta-label">DATE</span>
+            <strong>
+                {{ event.starts_at|date:"F j, Y" }}
+            </strong>
+        </div>
+
+        <div class="summary-item">
+            <span class="meta-label">TIME</span>
+            <strong>
+                {{ event.starts_at|time:"g:i A" }} –
+                {{ event.ends_at|time:"g:i A" }}
+            </strong>
+            <span class="muted">
+                Philippine Standard Time
+            </span>
+        </div>
+
+        <div class="summary-item">
+            <span class="meta-label">VENUE</span>
+            <strong>{{ event.venue }}</strong>
+        </div>
+
+        <div class="summary-item">
+            <span class="meta-label">EVENT STATUS</span>
+            <strong>{{ event.get_status_display }}</strong>
+        </div>
+    </aside>
+</div>
+{% endblock %}
