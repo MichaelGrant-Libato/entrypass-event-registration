@@ -1,0 +1,71 @@
+
+{% extends "events/base.html" %}
+
+{% block title %}Staff Workspace | EntryPass{% endblock %}
+
+{% block content %}
+<div class="staff-heading">
+    <div>
+        <p class="eyebrow">EVENT OPERATIONS</p>
+        <h1>Staff workspace</h1>
+        <p class="page-description">
+            Select an event to manage attendance
+            and verify registrations.
+        </p>
+    </div>
+
+    <form method="post"
+          action="{% url 'checkin:logout' %}">
+        {% csrf_token %}
+
+        <button type="submit" class="signout-button">
+            Sign out
+        </button>
+    </form>
+</div>
+
+<section aria-labelledby="staff-events-heading">
+    <div class="section-heading">
+        <h2 id="staff-events-heading">Events</h2>
+        <span class="section-count">
+            {{ events|length }} total
+        </span>
+    </div>
+
+    <div class="staff-event-list">
+        {% for event in events %}
+        <article class="staff-event-row">
+            <div class="staff-event-main">
+                <h3>{{ event.title }}</h3>
+
+                <p>
+                    {{ event.starts_at|date:"M j, Y" }}
+                    &middot;
+                    {{ event.starts_at|time:"g:i A" }}
+                    &middot;
+                    {{ event.venue }}
+                </p>
+            </div>
+
+            <div class="staff-event-meta">
+                <span class="staff-event-status">
+                    {{ event.get_status_display }}
+                </span>
+
+                <span class="muted">
+                    Capacity: {{ event.capacity }}
+                </span>
+            </div>
+        </article>
+        {% empty %}
+        <div class="empty-state">
+            <h3>No events available</h3>
+            <p>
+                Create an event through the administration
+                panel to get started.
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
