@@ -8,6 +8,7 @@
     <div>
         <p class="eyebrow">EVENT OPERATIONS</p>
         <h1>Staff workspace</h1>
+
         <p class="page-description">
             Select an event to manage attendance
             and verify registrations.
@@ -27,6 +28,7 @@
 <section aria-labelledby="staff-events-heading">
     <div class="section-heading">
         <h2 id="staff-events-heading">Events</h2>
+
         <span class="section-count">
             {{ events|length }} total
         </span>
@@ -35,6 +37,7 @@
     <div class="staff-event-list">
         {% for event in events %}
         <article class="staff-event-row">
+
             <div class="staff-event-main">
                 <h3>{{ event.title }}</h3>
 
@@ -55,7 +58,15 @@
                 <span class="muted">
                     Capacity: {{ event.capacity }}
                 </span>
+
+                <a
+                    href="{% url 'checkin:event_checkin' event.pk %}"
+                    class="staff-checkin-link"
+                >
+                    Open check-in &rarr;
+                </a>
             </div>
+
         </article>
         {% empty %}
         <div class="empty-state">

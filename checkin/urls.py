@@ -14,6 +14,11 @@ urlpatterns = [
         name="dashboard",
     ),
     path(
+        "events/<int:event_id>/checkin/",
+        views.event_checkin,
+        name="event_checkin",
+    ),
+    path(
         "login/",
         LoginView.as_view(
             template_name="checkin/login.html",
