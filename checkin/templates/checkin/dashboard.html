@@ -58,13 +58,18 @@
                 <span class="muted">
                     Capacity: {{ event.capacity }}
                 </span>
-
                 <a
                     href="{% url 'checkin:event_checkin' event.pk %}"
                     class="staff-checkin-link"
                 >
                     Open check-in &rarr;
                 </a>
+                <a
+                href="{% url 'checkin:event_attendees' event.pk %}"
+                class="staff-checkin-link"
+            >
+                View attendees &rarr;
+            </a>
             </div>
 
         </article>

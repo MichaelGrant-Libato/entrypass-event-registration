@@ -34,4 +34,9 @@ urlpatterns = [
         ),
         name="logout",
     ),
+    path(
+        "events/<int:event_id>/attendees/",
+        views.event_attendees,
+        name="event_attendees",
+    ),
 ]
